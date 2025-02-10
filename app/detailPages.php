@@ -12,7 +12,7 @@
 
 <body class="details-page">
 <?php
-include_once 'informatieDatabase.php'; 
+include_once 'informationDatabase.php';
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
 ?>
 <div class="gridContainer">

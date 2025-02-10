@@ -8,7 +8,7 @@
 </head>
 <body class="index">
 <?php
-include_once  'informatieDatabase.php'; 
+include_once 'informationDatabase.php';
 ?>
 <div class="gridContainer">
     <div  class="girdItem" id="gridItem1">
@@ -16,6 +16,7 @@ include_once  'informatieDatabase.php';
             <a href="http://localhost/" class="homepagelink navbarLink">LIBARY</a>
             <a class="notThispage blockCurser">DETAILSPAGE</a>
             <a href="http://localhost/gameSearching.php" class="notThispage navbarLink">SEARCH ENGINE</a>
+            <a href="http://localhost/loginSysteem.php" class="notThispage navbarLink">LOGIN</a>
         </div>
         <h1 id="gameLibaryText">Game Libary</h1>
         

@@ -145,79 +145,6 @@ class DataBase{
         }
     }
 
-    // function pasGameAan($afbeelding, $titel, $genre, $platform, $release_year, $beoordeeling, $description, $id) {
-    //     try {
-    //         // deletes the old image if a new one is uploaded
-    //         if (!empty($afbeelding)) {
-    //             $stmt = $this->conn->prepare("SELECT afbeelding FROM games WHERE id = :id");
-    //             $stmt->bindParam(':id', $id);
-    //             $stmt->execute();
-    //             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    //             if ($row && !empty($row["afbeelding"])) {
-    //                 $image_path = $row["afbeelding"];
-    //                 if (file_exists($image_path) && !unlink($image_path)) {
-    //                     echo "Failed to delete image: " . $image_path;
-    //                 }
-    //             }
-    //         }
-    
-    //         // makes it so the only data that is sent is the ones that are filled out
-    //         $fields = [];
-    //         $params = [];
-    
-    //         if (!empty($titel)) {
-    //             $fields[] = "title = :titel";
-    //             $params[':titel'] = $titel;
-    //         }
-    //         if (!empty($genre)) {
-    //             $fields[] = "genre = :genre";
-    //             $params[':genre'] = $genre;
-    //         }
-    //         if (!empty($platform)) {
-    //             $fields[] = "platform = :platform";
-    //             $params[':platform'] = $platform;
-    //         }
-    //         if (!empty($release_year)) {
-    //             $fields[] = "release_year = :uitkom_jaar";
-    //             $params[':uitkom_jaar'] = $release_year;
-    //         }
-    //         if (!empty($beoordeeling)) {
-    //             $fields[] = "rating = :beoordeeling";
-    //             $params[':beoordeeling'] = $beoordeeling;
-    //         }
-    //         if (!empty($description)) {
-    //             $fields[] = "descriptionGame = :descriptionGame";
-    //             $params[':descriptionGame'] = $description;
-    //         }
-    //         if (!empty($afbeelding)) {
-    //             $fields[] = "afbeelding = :afbeelding";
-    //             $params[':afbeelding'] = $afbeelding;
-    //         }
-    
-    //         //iff nothing is filled in it stops the code
-    //         if (empty($fields)) {
-    //             echo "No fields to update.";
-    //             return;
-    //         }
-    
-    //         //updates the data
-    //         $sql = "UPDATE games SET " . implode(", ", $fields) . " WHERE id = :id";
-    //         $stmt = $this->conn->prepare($sql);
-    
-    //         //binds the data
-    //         foreach ($params as $placeholder => $value) {
-    //             $stmt->bindValue($placeholder, $value);
-    //         }
-    //         $stmt->bindValue(':id', $id);
-    //         $stmt->execute();
-    
-    //         echo "Successfully updated.";
-    //         echo '<a href="http://localhost/eindopdracht/detailPages.php?id=' . $id . '"> Back</a>';
-    //     } catch (PDOException $e) {
-    //         echo "Error: " . $e->getMessage();
-    //     }
-    // }
-
 
     //returns all the details from a certen id
     function get_game_details($id) {
@@ -240,6 +167,48 @@ class DataBase{
     //ends the connection
     function __destruct() {
         $this->conn = null;
+    }
+
+    function addLogin($username, $password){
+        // test if username already exist
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            echo "<br> Username already exist";
+            return;
+        }
+
+
+        $stmt = $this->conn->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $password);
+        $stmt->execute();
+        echo "<br> User added successfully";
+        echo "<br><a href='http://localhost/loginSysteem.php'>Go back to login</a>";
+    }
+
+    function login($username, $password){
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (password_verify($password, $user['password'])) {
+                echo "<br> Login successful";
+                ?>
+                <script>
+                    setTimeout(function() {
+                        window.location.href = "http://localhost/";
+                    },2000);
+                </script>
+                <?php
+                exit();
+            } else {
+                echo "<br> Login failed";
+            }
+        }
+
     }
 
 }
