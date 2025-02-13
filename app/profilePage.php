@@ -1,8 +1,9 @@
 <?php
 session_start();
-
+if (empty($_SESSION['username'])) {
+    header("Location: index.php");
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,21 +11,20 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="stylesheet.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body class="index">
 <?php
-    include_once 'classes/gameManager.php';
+include_once 'classes/gameManager.php';
 ?>
 <div class="gridContainer">
     <div  class="girdItem" id="gridItem1">
         <div id="leftnavbar">
             <?php
             if(!empty($_SESSION['username'])){
-                echo '<a href="http://localhost/profilepage.php" class="notThispage navbarLink" id="welcomeText">Welcome, '.$_SESSION['username']        .'</a>';
+                echo '<a href="http://localhost/profilepage.php" class="homepagelink navbarLink" id="welcomeText">Welcome, '.$_SESSION['username']        .'</a>';
             }
             ?>
-            <a href="http://localhost/" class="homepagelink navbarLink">LIBARY</a>
+            <a href="http://localhost/" class="notThispage navbarLink">LIBARY</a>
             <a class="notThispage blockCurser">DETAILSPAGE</a>
             <a href="http://localhost/gameSearching.php" class="notThispage navbarLink">SEARCH ENGINE</a>
             <?
@@ -36,25 +36,22 @@ session_start();
                 echo '<a href="http://localhost/logout.php" class="notThispage navbarLink" id="logout">LOGOUT</a>';
             } ?>
         </div>
-        <h1 id="gameLibaryText">Game Libary</h1>
-        
-    </div>
-    <?php
-    //checks if the user is logged in and displays his name
+        <h1 id="gameLibaryText">Wishlist</h1>
 
-    ?>
+    </div>
+
     <div class="girdItem" id="gridItem2">
-        
+
         <?php
-            //gets the data out of the database and displays it in a list
-            $gamesOphalen = new gameManager();
-            $gamesOphalen->get_data_list(); 
+        //gets the data out of the database and displays it in a list
+        $gamesOphalen = new gameManager();
+        $gamesOphalen->get_data_list();
         ?>
     </div>
     <div class="girdItem" id="gridItem3">
-        <?php    
-            //gets the data out of the database and displays it in big pictures
-            $gamesOphalen->get_data_list_picture();
+        <?php
+        //gets the data out of the database and displays it in big pictures
+        $gamesOphalen->get_data_list_picture();
         ?>
     </div>
 </div>

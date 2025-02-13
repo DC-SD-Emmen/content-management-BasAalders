@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     // hide the previous and next buttons
     $("#pageButtons").hide();
+
     // initiade virables
     let search = "";
     let searchType = "";
@@ -263,7 +264,7 @@ $(document).ready(function () {
         console.log(formData);  // For debugging, to see the form data
     
         $.ajax({
-            url: 'http://localhost/formHandeling.php',
+            url: 'http://localhost/classes/formHandeling.php',
             type: 'POST',
             data: formData,  // Send the whole form data
             success: function (response) {
@@ -296,5 +297,5 @@ $(document).ready(function () {
             }
         });
     });
-    
+
 });

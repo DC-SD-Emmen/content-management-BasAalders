@@ -1,26 +1,48 @@
 <?php
-class DataBase{
+class gameManager{
 
-    private $host = "mysql"; 
-    private $dbname = "gamelibrary";
-    private $username = "root";
-    private $password = "root";
     private $conn;
-    function __construct(){
 
-        //connect to the database
-        try {  
-            $this->conn = new PDO("mysql:host=$this->host;dbname=$this->dbname;", $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        }catch(PDOException $e){
-            echo "Connection failed: " . $e->getMessage();
+    //making the connection
+    public function __construct() {
+        include_once 'databaseConnection.php';
+        $db = new DataBase();
+        $this->conn = $db->getConnection();
+    }
+
+    //function for deleting the data
+    function delete_data($id) {
+        try {
+
+            $stmt = $this->conn->prepare("SELECT afbeelding FROM games WHERE id='$id'");
+            $stmt->execute();
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $image_path = $row["afbeelding"];
+                //deleting the image
+                if (unlink($image_path)) {
+                    echo "Image deleted successfully: " . $image_path;
+                } else {
+                    echo "Failed to delete image: " . $image_path;
+                }
+            }
+            //delete the current game on wich the delete button had been pressed
+            $stmt = $this->conn->prepare("DELETE FROM games WHERE id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            if (is_file($image_path)) {
+
+            } else {
+                echo "Image not found: " . $image_path;
+            }
+            echo "Record deleted successfully";
+            //rederect to index.php
+            echo "<meta http-equiv='refresh' content='0;url=http://localhost/'>";
+
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
-    }
 
-    public function getConnection() {
-        return $this->conn;
     }
-
     public function handlePostRequest() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['allData'])) {
@@ -169,47 +191,7 @@ class DataBase{
         $this->conn = null;
     }
 
-    function addLogin($username, $password){
-        // test if username already exist
-        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
-        $stmt->bindParam(':username', $username);
-        $stmt->execute();
-        if ($stmt->rowCount() > 0) {
-            echo "<br> Username already exist";
-            return;
-        }
 
-
-        $stmt = $this->conn->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->execute();
-        echo "<br> User added successfully";
-        echo "<br><a href='http://localhost/loginSysteem.php'>Go back to login</a>";
-    }
-
-    function login($username, $password){
-        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
-        $stmt->bindParam(':username', $username);
-        $stmt->execute();
-        if ($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (password_verify($password, $user['password'])) {
-                echo "<br> Login successful";
-                ?>
-                <script>
-                    setTimeout(function() {
-                        window.location.href = "http://localhost/";
-                    },2000);
-                </script>
-                <?php
-                exit();
-            } else {
-                echo "<br> Login failed";
-            }
-        }
-
-    }
 
 }
 ?>

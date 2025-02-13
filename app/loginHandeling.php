@@ -1,28 +1,17 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Login</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-</html>
-
 <?php
-include_once 'informationDatabase.php';
+include_once 'classes/loginManager.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $db = new DataBase();
+    $login = new loginManager();
     if (isset($_POST["register"])) {
         $username = htmlspecialchars($_POST["username"]);
-        $password = htmlspecialchars($_POST["password"]);
-        echo "login in... <br> please wait";
-        echo "<br> Loggin is as: $username";
+        $password = $_POST["password"];
+        $username = ucfirst(trim($username));
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        echo "<br> hashed pasword is: $hashedPassword";
-        $db -> addLogin($username, $hashedPassword);
+        $login->addLogin($username, $hashedPassword);
     }else if (isset($_POST["login"])) {
         $username = htmlspecialchars($_POST["username"]);
-        $password = htmlspecialchars($_POST["password"]);
-        echo "login in... <br> please wait";
-        echo "<br> Loggin is as: $username";
-        $db -> login($username, $password);
+        $password = $_POST["password"];
+        $username = ucfirst(trim($username));
+        $login->login($username, $password);
     }
 }

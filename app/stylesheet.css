@@ -450,5 +450,9 @@ textarea {
     cursor: pointer;
 }
 
+#welcomeText{
+    font-size: 30px;
+}
+
 
 

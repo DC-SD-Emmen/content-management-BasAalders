@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,22 +15,35 @@
 
 <body class="details-page">
 <?php
-include_once 'informationDatabase.php';
+include_once 'classes/gameManager.php';
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
 ?>
 <div class="gridContainer">
     <div class="girdItem" id="gridItem1">
         <div id="leftnavbar">
-            <a href="http://localhost/" class="notThispage">LIBARY</a>
-            <a href="" class="homepagelink">DETAILSPAGE</a>
-            <a href="http://localhost/gameSearching.php" class="notThispage">SEARCH ENGINE</a>
+            <?php
+            if(!empty($_SESSION['username'])){
+                echo '<a href="http://localhost/profilepage.php" class="notThispage navbarLink" id="welcomeText">Welcome, '.$_SESSION['username']        .'</a>';
+            }
+            ?>
+            <a href="http://localhost/" class="notThispage navbarLink">LIBARY</a>
+            <a class="homepagelink navbarLink" href="">DETAILSPAGE</a>
+            <a href="http://localhost/gameSearching.php" class="notThispage navbarLink">SEARCH ENGINE</a>
+            <?
+            if (empty($_SESSION['username'])){
+                echo '<a href="http://localhost/login.php" class="notThispage navbarLink">LOGIN</a>';
+                echo '<a href="http://localhost/register.php" class="notThispage navbarLink">REGISTER</a>';
+            }
+            if (!empty($_SESSION['username'])){
+                echo '<a href="http://localhost/logout.php" class="notThispage navbarLink" id="logout">LOGOUT</a>';
+            } ?>
         </div>
         <h1 id="gameLibaryText">Game Libary</h1>
     </div>
     <div class="girdItem" id="gridItem2">
         <?php
         // gets the data out of the database and displays it in a list
-        $gamesOphalen = new DataBase();
+        $gamesOphalen = new gameManager();
         $gamesOphalen->get_data_list();
         ?>
     </div>
@@ -70,7 +86,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
         <br>
         <?php
         //calls the delete proses from gameManagement.php
-        include_once 'gameManagement.php';
+        include_once 'classes/gameManager.php';
         $gameMngr = new GameManager($gamesOphalen);
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['deleteButon'])) {
