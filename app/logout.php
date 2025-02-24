@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Check if a session exists before destroying it
 if (isset($_SESSION)) {
+    unset($_SESSION['username']);
     session_unset();     // Free all session variables
     session_destroy();   // Destroy the session
 }

@@ -186,6 +186,127 @@ class gameManager{
         }
     }
 
+    function get_favorite_games_list($user_id)
+    {
+        try{
+            $stmt = $this->conn->prepare("SELECT games.id, games.title, games.afbeelding FROM games INNER JOIN user_games ON games.id = user_games.game_id WHERE user_games.user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            echo "<ul>";
+            //checks if there is something in the database
+            if ($stmt->rowCount()> 0) {
+                include 'games.php';
+                //create a list item for every item in the database and sets and gets them using functions in games.php
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $gameId = $row['id'];
+                    $game = new GamesDb();
+                    $game->set_image($row["afbeelding"]);
+                    $game->set_titel($row["title"]);
+                    $afbeeldingPath = $game->get_image();
+                    $gameTitle = $game-> get_titel();
+                    echo "<a href='detailpageWhitelist.php?id=$gameId'><li><div><img class='imgBeforeTextRight' src='$afbeeldingPath' alt='$gameTitle'> {$gameTitle}</div></li></a>";
+                }
+                echo "</ul>";
+            }else{
+                // displays "0 results" if the database is empty
+                echo "You dont have any games whitelisted.";
+            }
+            //display errors
+        }catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+
+    }
+
+    function get_favorite_games_list_picture($user_id)
+    {
+        try{
+            $stmt = $this->conn->prepare("SELECT games.id, games.afbeelding FROM games INNER JOIN user_games ON games.id = user_games.game_id WHERE user_games.user_id = :user_id");
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            echo "<div class='bigPicturesGridContainer'>";
+            //checks if there is something in the database
+            if ($stmt->rowCount()> 0) {
+                //gets the data out of the database and displays it in big pictures
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $gameId = $row['id'];
+                    $game = new GamesDb();
+                    $game->set_image($row["afbeelding"]);
+                    $afbeeldingPath = $game->get_image();
+
+                    echo "<a href='detailpageWhitelist.php?id=$gameId'>" . '<div class="bigPictureGridItem">' . '<img class="imgBig" src="' . $afbeeldingPath . '"></div>';
+                }
+                echo "</div>";
+            }else{
+            }
+            //display errors
+        }catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    function add_favorite_games($game_id, $user_id)
+    {
+        $stmt =  $this->conn->prepare("SELECT * FROM user_games WHERE game_id = :game_id AND user_id = :user_id");
+        $stmt->bindParam(':game_id', $game_id);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['error'] = 'Already whitelisted';
+            header("Location: detailPages.php?id=$game_id");
+            return;
+        }
+
+        try {
+            $stmt = $this->conn->prepare("INSERT INTO user_games (user_id, game_id) VALUES (:user_id, :game_id)");
+            $stmt->bindParam(':game_id', $game_id);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            header("Location: profilepage.php");
+        }catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+
+    }
+    function remove_favorite_games($game_id, $user_id)
+    {
+        try{
+            $stmt = $this->conn->prepare("SELECT * FROM user_games WHERE game_id = :game_id AND user_id = :user_id");
+            $stmt->bindParam(':game_id', $game_id);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $stmt = $this->conn->prepare("DELETE FROM user_games WHERE game_id = :game_id AND user_id = :user_id");
+                $stmt->bindParam(':game_id', $game_id);
+                $stmt->bindParam(':user_id', $user_id);
+                $stmt->execute();
+                header("Location: profilepage.php");
+            }
+        }catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    function get_users_by_game_id($game_id)
+    {
+        $stmt = $this->conn->prepare("SELECT users.username FROM user_games JOIN users ON user_games.user_id = users.id WHERE game_id = :game_id");
+
+        $stmt->bindParam(':game_id', $game_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Fetch all usernames into an array
+        $usernames = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $usernames[] = $row['username']; // Append username to array
+        }
+        if ($stmt->rowCount() > 0) {
+            return implode(", ", $usernames); // Return array of usernames
+        }else{
+            return 'No one';
+        }
+    }
     //ends the connection
     function __destruct() {
         $this->conn = null;

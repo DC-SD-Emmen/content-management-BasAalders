@@ -44,7 +44,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
         <?php
         // gets the data out of the database and displays it in a list
         $gamesOphalen = new gameManager();
-        $gamesOphalen->get_data_list();
+        $gamesOphalen->get_favorite_games_list($_SESSION['userId']);
         ?>
     </div>
     <div class="girdItem" id="gridItem3">
@@ -81,16 +81,13 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
             echo "<h2>Game not found.</h2>";
         }
         ?>
-        <form id="whitelistForm" name="whitelistForm" method="post" action="userHandeling.php">
-            <?php echo '<input type="hidden" name="gameId" value="' . $id . '">' ?>
-            <input type="submit" id="whitelistButton" name="addToWhitelist" value="whitelist game">
-        </form>
-        <a href="#deletebuttonDiv"><div id="deletebutton">delete</div></a>
+        <a href="#deletebuttonDiv"><div id="deletebutton">de-whitelist</div></a>
         <div id="deletebuttonDiv">
             <p class="middleText">are you sure?</p> <br>
-            <form id="deletebuttonForm" method="POST">
+            <form id="deletebuttonForm" method="POST" action="userHandeling.php">
                 <a href="#deletebutton" id="dontdelete"><div>no</div></a>
-                <input type="submit" id="yesDeletebutton" name="deleteButon" value="yes">
+                <?php echo '<input type="hidden" name="gameId" value="' . $id .'">'?>
+                <input type="submit" id="yesDeletebutton" name="deWhitelist" value="yes">
             </form>
         </div>
         <br>
@@ -102,7 +99,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
             if (isset($_POST['deleteButon'])) {
                 $gameMngr-> delete_data($id);
             }
-        }   
+        }
         ?>
         <div id="lightbox-modal" style="display: none;">
             <span id="lightbox-close" style="cursor: pointer; font-size: 2rem; position: absolute; top: 10px; right: 20px;">&times;</span>

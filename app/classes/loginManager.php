@@ -39,6 +39,7 @@ class loginManager{
             if (password_verify($password, $user['password'])) {
                 session_start();
                 $_SESSION['username'] = $username;
+                $_SESSION['userId'] = $user['id'];
                 header("Location: http://localhost/");
                 exit();
             } else {

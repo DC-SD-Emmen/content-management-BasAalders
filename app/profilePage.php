@@ -36,8 +36,9 @@ include_once 'classes/gameManager.php';
                 echo '<a href="http://localhost/logout.php" class="notThispage navbarLink" id="logout">LOGOUT</a>';
             } ?>
         </div>
-        <h1 id="gameLibaryText">Wishlist</h1>
-
+        <?php
+        echo '<h1 id="gameLibaryText">Wishlist of '.$_SESSION['username'].'</h1>'
+        ?>
     </div>
 
     <div class="girdItem" id="gridItem2">
@@ -45,13 +46,13 @@ include_once 'classes/gameManager.php';
         <?php
         //gets the data out of the database and displays it in a list
         $gamesOphalen = new gameManager();
-        $gamesOphalen->get_data_list();
+        $gamesOphalen->get_favorite_games_list($_SESSION['userId']);
         ?>
     </div>
     <div class="girdItem" id="gridItem3">
         <?php
         //gets the data out of the database and displays it in big pictures
-        $gamesOphalen->get_data_list_picture();
+        $gamesOphalen->get_favorite_games_list_picture($_SESSION['userId']);
         ?>
     </div>
 </div>

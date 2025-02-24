@@ -17,10 +17,10 @@ session_start();
 <?php
 if (!empty($_SESSION['error'])) {
     echo '<p id="error">' . $_SESSION['error'] . '</p>';
-    session_unset();
+    unset($_SESSION['error']);
 }else if (!empty($_SESSION['success'])){
     echo '<p id="success">' . $_SESSION['success'] . '</p>';
-    session_unset();
+    unset($_SESSION['success']);
 }
 ?>
 <form action="loginHandeling.php" method="post" id="registerForm">
