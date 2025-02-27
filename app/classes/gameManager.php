@@ -48,10 +48,10 @@ class gameManager{
             if (isset($_POST['allData'])) {
                 // URL-decode the incoming data
                 $rawData = urldecode($_POST['allData']);
-                
+
                 // Now decode the JSON data
                 $gameData = json_decode($rawData, true);
-                
+
                 // Check if the decoding was successful
                 if ($gameData) {
                     $this->add_game($gameData);
@@ -68,6 +68,7 @@ class gameManager{
     
 
     function add_game($gameData) {
+        echo "it is being added???????///?";
         try {
             // Use the null coalescing operator to handle missing values
             $titel = $gameData['name'] ?? 'N/A';

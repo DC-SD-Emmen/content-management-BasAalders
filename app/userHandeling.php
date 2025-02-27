@@ -1,4 +1,5 @@
 <?php
+
 include_once 'classes/loginManager.php';
 include_once 'classes/gameManager.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -8,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = $_POST["password"];
         $username = ucfirst(trim($username));
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $login->addLogin($username, $hashedPassword);
+         $login->addLogin($username, $hashedPassword);
     }elseif (isset($_POST["login"])) {
         $username = htmlspecialchars($_POST["username"]);
         $password = $_POST["password"];

@@ -103,7 +103,8 @@ a:link, a:visited{
     width: 90%; 
     height: 90%;
     border-radius: 10px;
-    transition: .5s ease;
+    will-change: transform;
+    transition: transform 0.5s ease;
 }
 
 .screenshot:hover{
@@ -129,7 +130,8 @@ li{
     background-color: black;
     border: 3px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0.3);
-    transition: .5s ease;
+    will-change: transform;
+    transition: transform 0.5s ease;
     padding-left: 5px;
     border-radius: 5px;
 }
@@ -169,7 +171,8 @@ li:hover{
     object-fit: cover;
     border: 3px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0.3);
-    transition: .5s ease;
+    will-change: transform;
+    transition: transform 0.5s ease;
     border-radius: 10px;
 }
 
@@ -249,7 +252,8 @@ textarea {
     text-align: center;
     backdrop-filter: blur(20px);
     border-radius: 10px;
-    transition: .5s ease;
+    will-change: transform;
+    transition: transform 0.5s ease;
 }
 
 #deletebutton:hover {
@@ -303,7 +307,7 @@ textarea {
 }
 
 #leftnavbar > a{
-    transition: .5s ease;
+    transition: 0.5s ease;
 }
 
 #leftnavbar > a:hover{
@@ -359,7 +363,8 @@ textarea {
     background-color: black;
     border: 3px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0.3);
-    transition: .5s ease;
+    will-change: transform;
+    transition: transform 0.5s ease;
     padding-left: 5px;
     border-radius: 5px;
     width: 90%;

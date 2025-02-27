@@ -43,9 +43,14 @@ class loginManager{
                 header("Location: http://localhost/");
                 exit();
             } else {
+                session_start();
                 $_SESSION['error'] = "Wrong password";
                 header("Location: http://localhost/login.php");
             }
+        }else{
+            session_start();
+            $_SESSION['error'] = "No user found with this username";
+            header("Location: http://localhost/login.php");
         }
 
     }

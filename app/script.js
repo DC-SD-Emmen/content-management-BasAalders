@@ -219,7 +219,7 @@ $(document).ready(function () {
                 <div class='gameScreenshots'>
                     ${gameDetail.short_screenshots.map(screenshot => `<img src="${screenshot.image}" alt="Screenshot" />`).join('')}
                 </div>
-                <form method="post" id="addToGamelibaryForm">
+                <form method="POST" id="addToGamelibaryForm">
                     <!-- Convert gameDetail to a JSON string and then escape it -->
                     <input type="hidden" name="allData" value="${encodeURIComponent(JSON.stringify(gameDetail))}">
                     <input type="submit" value="Add to gamelibary" id="addToGamelibary">
@@ -268,6 +268,7 @@ $(document).ready(function () {
             type: 'POST',
             data: formData,  // Send the whole form data
             success: function (response) {
+                console.log(response)
                 if (response.includes('"status":"error"')) {
                     console.log('Error:', response);
                     $('#addToGamelibary').prop('disabled', true);
