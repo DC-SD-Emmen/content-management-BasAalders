@@ -10,14 +10,15 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
         $gamesOphalen->get_data_list();
         ?>
     </div>
+        <div class="girdItem" id="gridItem3">
 
         <?php
-        include_once 'templates/detailpages.php';
         if (!empty($_SESSION['username'])){
             echo '<form id="whitelistForm" name="whitelistForm" method="post" action="userHandeling.php">';
             echo '<input type="hidden" name="gameId" value="' . $id . '">';
             echo '<input type="submit" id="whitelistButton" name="addToWhitelist" value="whitelist game"></form>';
-        } ?>
+            include_once 'templates/detailpages.php';
+        } ?>``
         <a href="#deletebuttonDiv"><div id="deletebutton">delete</div></a>
         <div id="deletebuttonDiv">
             <p class="middleText">are you sure?</p> <br>

@@ -10,6 +10,8 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
         $gamesOphalen->get_favorite_games_list($_SESSION['userId']);
         ?>
     </div>
+        <div class="girdItem" id="gridItem3">
+
         <?php include_once 'templates/detailpages.php'; ?>
         <a href="#deletebuttonDiv"><div id="deletebutton">de-whitelist</div></a>
         <div id="deletebuttonDiv">

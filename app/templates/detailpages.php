@@ -1,4 +1,3 @@
-<div class="girdItem" id="gridItem3">
 <?php
 if (!empty($_SESSION['error'])) {
     echo '<p id="error">' . $_SESSION['error'] . '</p>';

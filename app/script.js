@@ -3,7 +3,7 @@ $(document).ready(function () {
     // hide the previous and next buttons
     $("#pageButtons").hide();
 
-    // initiade virables
+    // initiade variables
     let search = "";
     let searchType = "";
     let page = 1;
@@ -28,7 +28,7 @@ $(document).ready(function () {
         console.log("Search type:", searchType);
         console.log("Search value:", search);
 
-        // first piece of data that will be send to the api
+        // first piece of data that will be sent to the api
         let data = {
             page_size: page_size,
             page: page,
@@ -37,7 +37,7 @@ $(document).ready(function () {
         // set the search value to lowercase and trim it to avoid 0 results
         search = search.toLowerCase().trim();
 
-        // cheks on wich the search is and ajusted the search based on that
+        // checks on wich the search is and adjusted the search based on that
         if (searchType === "gameName") {
             data.search = search;
         } else if (searchType === "gameGenre") {
@@ -74,7 +74,7 @@ $(document).ready(function () {
             data.stores = search;
         }
 
-        // logs the data that will be send to the api
+        // logs the data that will be sent to the api
         console.log("Data being sent to API:", data);
 
         // ajax call
@@ -83,7 +83,7 @@ $(document).ready(function () {
             type: 'GET',
             // important the data
             data: data,
-            // if succesfull do this
+            // if successful do this
             success: function (response) {
                 // log the amount of games found
                 console.log(response.results.length);
@@ -158,7 +158,7 @@ $(document).ready(function () {
     });
 
     // if the search form is submitted gets the data from the form and calls the fetchgames function
-    // makes also sure that th epage doesnt reload
+    // makes also sure that the page doesn't reload
     $("#formZoeken").submit(function (event) {
         event.preventDefault(); // Prevent the default form submission
         $("#search").blur();

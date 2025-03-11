@@ -24,7 +24,7 @@ include_once 'classes/gameManager.php';
                 echo '<a href="http://localhost/profilepage" class="notThispage navbarLink" id="welcomeText">'.$_SESSION['username'] . "' wishlist"        .'</a>';
             }
             ?>
-            <a href="http://localhost/" class="notThispage navbarLink">LIBARY</a>
+            <a href="http://localhost/" class="notThispage navbarLink">LIBRARY</a>
             <a href="http://localhost/gameSearching.php" class="notThispage navbarLink">SEARCH ENGINE</a>
             <?
             if (empty($_SESSION['username'])){
@@ -33,8 +33,10 @@ include_once 'classes/gameManager.php';
             }
             if (!empty($_SESSION['username'])){
                 echo '<a href="http://localhost/logout.php" class="notThispage navbarLink" id="logout">LOGOUT</a>';
+                echo '<a href="http://localhost/usersettings" class="notThispage navbarLink">SETTINGS</a>';
             } ?>
         </div>
         <h1 id="gameLibaryText">Game Libary</h1>
+
 
     </div>

@@ -54,4 +54,65 @@ class loginManager{
         }
 
     }
+
+    function changeUsername($password, $newusername)
+    {
+        session_start();
+        $currentusername = $_SESSION['username'];
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $currentusername);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $id = $result['id'];
+            if (password_verify($password, $result['password'])) {
+                $stmt = $this->conn->prepare("UPDATE users SET username = :newusername WHERE id = :id");
+                $stmt->bindParam(':newusername', $newusername);
+                $stmt->bindParam(':id', $id);
+                $stmt->execute();
+                $_SESSION['username'] = $newusername;
+                $_SESSION['success'] = "Your username have been changed";
+            } else {
+                $_SESSION['error'] = "Wrong password";
+            }
+        }else{
+            $_SESSION['error'] = "something went wrong";
+        }
+        header("Location: http://localhost/usersettings.php");
+
+    }
+    function eraseCredentials($password){
+        session_start();
+        $username = $_SESSION["username"];
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (password_verify($password, $result['password'])) {
+            $stmt = $this->conn->prepare("DELETE FROM users WHERE username = :username");
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+            $_SESSION['username'] = $username;
+            header('Location: http://localhost/logout.php');
+        }
+    }
+
+    function changePassword($currentpassword, $newpassword){
+        session_start();
+        $newHashedPassword = password_hash($newpassword, PASSWORD_DEFAULT);
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $_SESSION['username']);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (password_verify($currentpassword, $result['password'])) {
+            $stmt = $this->conn->prepare("UPDATE users SET password = :password WHERE username = :username");
+            $stmt->bindParam(':password', $newHashedPassword);
+            $stmt->bindParam(':username', $_SESSION['username']);
+            $stmt->execute();
+            $_SESSION['success'] = "Your password have been changed";
+        }else{
+            $_SESSION['error'] = "Wrong password";
+        }
+        header("Location: http://localhost/usersettings.php");
+    }
 }
