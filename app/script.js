@@ -172,7 +172,6 @@ $(document).ready(function () {
     // if a game is clicked get the game details and display them
     $('#games-list').on('click', '.game', function () {
         // get the small game info html and set it to a variable
-            $(document).ready(function() {
             // Check if any `.screenshot` elements exist before applying the event
             if ($(".screenshot").length > 0) {
                 // Add 'focus' event listener for `.screenshot` elements
@@ -183,7 +182,7 @@ $(document).ready(function () {
             } else {
                 console.warn("No `.screenshot` elements found to bind events.");
             }
-        });smallGameInfoHtml = $(this).find('.game-info').html();
+        smallGameInfoHtml = $(this).find('.game-info').html();
         // if the game is small and the game is clicked
         if (descriptionShown) {
             console.log("descriptionShown", descriptionShown);
@@ -264,7 +263,7 @@ $(document).ready(function () {
         console.log(formData);  // For debugging, to see the form data
     
         $.ajax({
-            url: 'http://localhost/classes/formHandeling.php',
+            url: 'http://localhost/formHandeling.php',
             type: 'POST',
             data: formData,  // Send the whole form data
             success: function (response) {

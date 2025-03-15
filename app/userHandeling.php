@@ -7,20 +7,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["register"])) {
         $username = htmlspecialchars($_POST["username"]);
         $password = $_POST["password"];
+        $email = htmlspecialchars($_POST["email"]);
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $username = ucfirst(trim($username));
-         $login->addLogin($username, $hashedPassword);
+        $login->addLogin($username, $email ,$hashedPassword);
     }elseif (isset($_POST["login"])) {
         $username = htmlspecialchars($_POST["username"]);
         $password = $_POST["password"];
         $username = ucfirst(trim($username));
         $login->login($username, $password);
-    }elseif (isset($_POST["addToWhitelist"])) {
+    }elseif (isset($_POST["addToWishlist"])) {
         session_start();
         $game_id = $_POST["gameId"];
         $user_id = $_SESSION["userId"];
         $gameManager->add_favorite_games($game_id, $user_id);
-    }elseif (isset($_POST["deWhitelist"])) {
+    }elseif (isset($_POST["deWishlist"])) {
         session_start();
         $game_id = $_POST["gameId"];
         $user_id = $_SESSION["userId"];

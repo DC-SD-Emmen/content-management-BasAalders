@@ -8,7 +8,7 @@ class loginManager{
         $db = new DataBase();
         $this->conn = $db->getConnection();
     }
-    function addLogin($username, $password){
+    function addLogin($username, $email, $password){
         // test if username already exist
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
         $stmt->bindParam(':username', $username);
@@ -21,13 +21,21 @@ class loginManager{
         }
 
 
-        $stmt = $this->conn->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
+        $stmt = $this->conn->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
         $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
         $stmt->bindParam(':password', $password);
         $stmt->execute();
         session_start();
-        $_SESSION['success'] = "Your login have been added please login";
-        header("Location: http://localhost/login.php");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['username'] = $username;
+            $_SESSION['userId'] = $user['id'];
+        }
+        header("Location: http://localhost/");
     }
 
     function login($username, $password){

@@ -13,6 +13,14 @@ class gameManager{
     //function for deleting the data
     function delete_data($id) {
         try {
+            $stmt = $this->conn->prepare("SELECT * FROM user_games WHERE game_id = :game_id");
+            $stmt->bindParam(":game_id", $id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $stmt = $this->conn->prepare("DELETE FROM user_games WHERE game_id = :game_id");
+                $stmt->bindParam(":game_id", $id);
+                $stmt->execute();
+            }
 
             $stmt = $this->conn->prepare("SELECT afbeelding FROM games WHERE id='$id'");
             $stmt->execute();
@@ -129,7 +137,7 @@ class gameManager{
                     $game->set_titel($row["title"]);
                     $afbeeldingPath = $game->get_image();
                     $gameTitle = $game-> get_titel();
-                    echo "<a href='detailPages.php?id=$gameId'><li><div><img class='imgBeforeTextRight' src='$afbeeldingPath' alt='$gameTitle'> {$gameTitle}</div></li></a>";
+                    echo "<a href='detailPages.php?id=$gameId'><li><div><img class='imgBeforeTextRight' src='$afbeeldingPath' alt='$gameTitle'> $gameTitle</div></li></a>";
                 }
                 echo "</ul>";
             }else{
@@ -155,21 +163,20 @@ class gameManager{
                     $game->set_image($row["afbeelding"]);
                     $afbeeldingPath = $game->get_image();
 
-                    echo "<a href='detailPages.php?id=$gameId'>" . '<div class="bigPictureGridItem">' . '<img class="imgBig" src="' . $afbeeldingPath . '"></div>';    
+                    echo "<a href='detailPages.php?id=$gameId'>" . '<div class="bigPictureGridItem">' . '<img class="imgBig" alt="img" src="' . $afbeeldingPath . '"></div>';
                 }
                 echo "</div>";
             }else{
                 // displays "0 results" if the database is empty
                 echo "0 results";
             }
-        //display errors
         }catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
     }
 
 
-    //returns all the details from a certen id
+    //returns all the details from a certain id
     function get_game_details($id) {
         try {
             $stmt = $this->conn->prepare("SELECT * FROM games WHERE id = :id");
@@ -177,8 +184,7 @@ class gameManager{
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
-                $game = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $game; 
+                return $stmt->fetch(PDO::FETCH_ASSOC);
             } else {
                 return null;
             }
@@ -205,14 +211,12 @@ class gameManager{
                     $game->set_titel($row["title"]);
                     $afbeeldingPath = $game->get_image();
                     $gameTitle = $game-> get_titel();
-                    echo "<a href='detailpageWhitelist.php?id=$gameId'><li><div><img class='imgBeforeTextRight' src='$afbeeldingPath' alt='$gameTitle'> {$gameTitle}</div></li></a>";
+                    echo "<a href='detailpageWishlist.php?id=$gameId'><li><div><img class='imgBeforeTextRight' src='$afbeeldingPath' alt='$gameTitle'> $gameTitle</div></li></a>";
                 }
                 echo "</ul>";
             }else{
-                // displays "0 results" if the database is empty
-                echo "You dont have any games whitelisted.";
+                echo "You dont have any games wishlisted.";
             }
-            //display errors
         }catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -236,12 +240,11 @@ class gameManager{
                     $game->set_image($row["afbeelding"]);
                     $afbeeldingPath = $game->get_image();
 
-                    echo "<a href='detailpageWhitelist.php?id=$gameId'>" . '<div class="bigPictureGridItem">' . '<img class="imgBig" src="' . $afbeeldingPath . '"></div>';
+                    echo "<a href='detailpageWishlist.php?id=$gameId'>" . '<div class="bigPictureGridItem">' . '<img class="imgBig" alt="img" src="' . $afbeeldingPath . '"></div>';
                 }
                 echo "</div>";
             }else{
             }
-            //display errors
         }catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -254,7 +257,7 @@ class gameManager{
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
-            $_SESSION['error'] = 'Already whitelisted';
+            $_SESSION['error'] = 'Already whislisted';
             header("Location: detailPages.php?id=$game_id");
             return;
         }
@@ -316,4 +319,3 @@ class gameManager{
 
 
 }
-?>

@@ -1,8 +1,8 @@
 <?php
+session_start();
 include_once 'templates/index_start.php';
 ?>
     <div class="girdItem" id="gridItem2">
-        
         <?php
             //gets the data out of the database and displays it in a list
             $gamesOphalen = new gameManager();

@@ -1,7 +1,8 @@
 <?php
+session_start();
 include_once 'templates/index_start.php';
 include_once 'classes/gameManager.php';
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
+$id = $_GET['id'] ?? 0;
 ?>
     <div class="girdItem" id="gridItem2">
         <?php
@@ -14,26 +15,22 @@ $id = isset($_GET['id']) ? $_GET['id'] : 0;
 
         <?php
         if (!empty($_SESSION['username'])){
-            echo '<form id="whitelistForm" name="whitelistForm" method="post" action="userHandeling.php">';
+            echo '<form id="wishlistForm" name="wishlistForm" method="post" action="userHandeling.php">';
             echo '<input type="hidden" name="gameId" value="' . $id . '">';
-            echo '<input type="submit" id="whitelistButton" name="addToWhitelist" value="whitelist game"></form>';
+            echo '<input type="submit" id="wishlistButton" name="addToWishlist" value="wishlist game"></form>';
+        }
             include_once 'templates/detailpages.php';
-        } ?>``
-        <a href="#deletebuttonDiv"><div id="deletebutton">delete</div></a>
-        <div id="deletebuttonDiv">
-            <p class="middleText">are you sure?</p> <br>
+        ?>
             <form id="deletebuttonForm" method="POST">
-                <a href="#deletebutton" id="dontdelete"><div>no</div></a>
-                <input type="submit" id="yesDeletebutton" name="deleteButon" value="yes">
+                <input type="submit" id="Deletebutton" name="deleteButton" value="delete">
             </form>
-        </div>
         <br>
         <?php
         //calls the delete proses from gameManagement.php
         include_once 'classes/gameManager.php';
-        $gameMngr = new GameManager($gamesOphalen);
+        $gameMngr = new GameManager();
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (isset($_POST['deleteButon'])) {
+            if (isset($_POST['deleteButton'])) {
                 $gameMngr-> delete_data($id);
             }
         }   
